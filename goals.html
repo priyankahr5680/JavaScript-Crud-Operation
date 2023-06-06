@@ -1,34 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crud Operation</title>
-    <link rel="stylesheet" href="goals.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="goals.css">
+
 </head>
+
 <body>
-     <div class="form-container">
-       
-        <form action="" id="form">
-            <input type="text" id="title" name="title"  placeholder="Type a goal Title here"><br><br>
-            <input type="text" id="description"  name="description" placeholder="Type a goal description here"><br><br>          
-            <button type="button" value="Submit" id="btn1" onclick="Submit()">Add a New Goal</button>
-            <button type="reset"id="btn2" value="reset" >Reset</button>
-        </form>
-    </div>
-    <br>
-    <div id="msg"></div>
-        <div class="data-table">
-        <table  id="table">
-            <tr>
-                <th class="col">Goal Title</th>
-                <th class="col">Goal Description</th>
-                <th class="col">Action</th>
-            </tr>
-        </table>
-    </div>
-    </body>
-    <script src="goals.js"></script>
+  <div class="container">
+  <h2>Goals Interface</h1>
+  <div class="goal-form">
+   
+    <form action="" id="form">
+      <div id="form-container">
+        <div class="form-row, row" >
+          <button type="button" onclick="remove(this)">&#10006</button>
+          <input type="text" id="title" name="title[]"  placeholder="Type a goal Title here">
+         
+        </div>
+        <div class="form-row">
+          <input type="text" id="description"  name="description[]" placeholder="Type a goal description here">
+        </div>
+      </div>
+      <button class="btn" type="button" onclick="add()">Add new Goal</button>
+      <button type="button" value="Submit" id="btn1" onclick="Save()">Save</button>
+    </form>
+  </div>
+</div>
+
+
+
+  <div class="data-table">
+    <table id="table">
+      <tr>
+        <th class="col">Goal Title</th>
+        <th class="col">Goal Description</th>
+
+      </tr>
+    </table>
+  </div>
+  <script src="goals.js"></script>
+
 </body>
+
 </html>
