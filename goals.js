@@ -1,80 +1,88 @@
-var row=null;
+let dataEntered = [];
 
-function add() {
-    var formContainer = document.getElementById("form-container");
-    var newField = document.createElement("div")
-    newField.innerHTML = `
-        <div class="form-row, row">
-            <button type="button" onclick="remove(this)">&#10006</button>
-            <input type="text" id="title"   name="title[]" placeholder="Type a goal Title here">
-   
-        </div>
-        <div class="form-row">
-            <input type="text" name="description[]" id="description" placeholder="Type a goal description here">
-         </div>`
-    formContainer.appendChild(newField)
+function addForm() {
+  const goalContainer = document.getElementById("goal-container");
+  const formRepeats = document.getElementsByClassName("form-repeat");
+  const lastForm = formRepeats[formRepeats.length - 1];
+  const newForm = lastForm.cloneNode(true);
 
+  const formInputs = newForm.querySelectorAll("input");
+  formInputs.forEach((input) => {
+    input.value = "";
+    input.removeAttribute("readonly");
+  });
+
+  const previousForm = formRepeats[formRepeats.length - 1];
+  if (previousForm) {
+    const previousFormInputs = previousForm.querySelectorAll("input");
+    previousFormInputs.forEach((input) => {
+      input.disabled = true; // Disable input fields for saved data
+    });
+  }
+
+  goalContainer.insertBefore(newForm, document.getElementById("add-button"));
+
+  const newFormInputs = newForm.querySelectorAll("input");
+  newFormInputs.forEach((input) => {
+    input.disabled = false; // Enable input fields for the new form
+  });
 }
-
 
 function Save() {
-    var dataEntered = retrieveData()
-     var readData = readingDataFromLocalStorage(dataEntered);
-     var title = document.forms["form"]["title"].value;
-     var description = document.forms["form"]["description"].value;
-     if (dataEntered == false) {
-        alert("please enter all field")
-     }
-     else {
-        var titleValid = /^[A-Za-z]+$/;
-        if (!title.match(titleValid)) {
-            alert("Title should only contain letters.");
-            return false;
-        }
-        var descriptionValid = /^[A-Za-z0-9]+$/;
-        if (!description.match(descriptionValid)) {
-            alert("Description should contain both letters and numbers.");
-            return false;
-        }
-        insert(readData)
-     }           
- } 
-function retrieveData() {
-    var title = document.getElementById("title").value;
-    var description = document.getElementById("description").value;
-    var arr = [title, description]
-    if (arr.includes("")) {
-        return false;
-    } else {
-        return arr;
+  var formRepeats = document.getElementsByClassName("form-repeat");
+  for (let i = 0; i < formRepeats.length; i++) {
+    const currentForm = formRepeats[i];
+    var title = currentForm.querySelector("input[name='title']").value;
+    var description = currentForm.querySelector("input[name='description']").value;
+
+    if (title.trim() === "" || description.trim() === "") {
+      alert("Please fill in all fields.");
+      return false;
     }
 
+    var titleValid = /^[A-Za-z]+$/;
+    if (!title.match(titleValid)) {
+      alert("Title should only contain letters.");
+      return false;
+    }
+
+    var descriptionValid = /^[A-Za-z0-9]+$/;
+    if (!description.match(descriptionValid)) {
+      alert("Description should contain both letters and numbers.");
+      return false;
+    }
+  }
+
+  dataEntered = [title, description];
+  insert(dataEntered);
+
+  formRepeats = document.getElementsByClassName("form-repeat");
+  for (let i = 0; i < formRepeats.length - 1; i++) {
+    const currentForm = formRepeats[i];
+    const formInputs = currentForm.querySelectorAll("input");
+    formInputs.forEach((input) => {
+      input.disabled = true; // Disable input fields for saved data
+    });
+  }
 }
 
-
-function readingDataFromLocalStorage(dataEntered) {
-    var t = localStorage.setItem("Title", dataEntered[0]);
-    var d = localStorage.setItem("Description", dataEntered[1]);
-
-    var t1 = localStorage.getItem("Title", t);
-    var d1 = localStorage.getItem("Description", d);
-
-    var arr = [t1, d1];
-    return arr;
+function insert(dataEntered) {
+  const table = document.getElementById("table");
+  const row = table.insertRow();
+  row.insertCell(0).innerHTML = dataEntered[0];
+  row.insertCell(1).innerHTML = dataEntered[1];
 }
 
+function deleteGoal(button) {
+  const form = button.parentNode.parentNode.parentNode;
+  form.remove();
 
-function insert(readData) {
-    var row = table.insertRow()
-    row.insertCell(0).innerHTML = readData[0];
-    row.insertCell(1).innerHTML = readData[1];
+  const formRepeats = document.getElementsByClassName("form-repeat");
+  for (let i = 0; i < formRepeats.length; i++) {
+    const currentForm = formRepeats[i];
+    const formInputs = currentForm.querySelectorAll("input");
+    formInputs.forEach((input) => {
+      input.disabled = true; // Disable input fields for saved data
+    });
+  }
 }
-
-
-function remove(element) {
-    var formContainer = document.getElementById("form-container")
-    var Remove = element.parentNode.parentNode;
-    formContainer.removeChild(Remove)
-}
-
-
